@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="color-scheme" content="light">
+  <title>A Private Greeting</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = { theme: { extend: {
+      fontFamily: { serif: ['"Cormorant Garamond"', 'Georgia', 'serif'], sans: ['Inter', 'system-ui', 'sans-serif'] },
+      colors: { navy: '#0f1b2d', gold: '#a8814a', paper: '#f7f6f3' }
+    } } };
+  </script>
+  <style>
+    :root { box-sizing: border-box; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+    html { scroll-behavior: smooth; scroll-padding-top: calc(env(safe-area-inset-top, 0px) + 4rem); background: #f7f6f3; }
+    body { background: #f7f6f3; }
+    .reveal { opacity: 0; transform: translateY(12px); transition: opacity .8s ease, transform .8s ease; }
+    .reveal.show { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) { .reveal { transition: none; opacity: 1; transform: none; } }
+  </style>
+
+</head>
+<body class="font-sans text-slate-600 bg-paper antialiased">
+  <main id="gate" class="min-h-screen flex items-center justify-center px-6">
+    <div class="w-full max-w-md text-center">
+      <div class="mx-auto mb-8 w-16 h-16 rounded-full border border-gold/60 flex items-center justify-center font-serif text-lg font-semibold tracking-widest text-gold">P.E.A.</div>
+      <p class="text-xs font-medium tracking-[0.3em] text-gold uppercase">Private Greeting</p>
+      <h1 class="mt-3 font-serif text-4xl font-semibold text-navy">Access Required</h1>
+      <p class="mt-4 text-slate-500 font-light">This page was made for one person. Please enter your access code to continue.</p>
+      <form id="f" class="mt-8 bg-white border border-slate-200 border-t-2 border-t-gold rounded-lg shadow-sm p-6 text-left" autocomplete="off">
+        <label for="pw" class="block text-sm font-medium text-navy">Access code</label>
+        <input id="pw" type="password" maxlength="12" autocomplete="off" autocapitalize="characters" spellcheck="false" required
+          class="mt-2 w-full rounded-md border border-slate-300 px-4 py-3 text-lg tracking-[0.4em] uppercase text-navy focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold">
+        <p class="mt-2 text-xs text-slate-400">Hint: three letters, the sender’s initials in the same format as yours.</p>
+        <p id="err" role="alert" class="mt-3 text-sm text-red-700 min-h-5"></p>
+        <button id="btn" class="mt-2 w-full py-3 text-sm font-medium tracking-wide text-white bg-navy rounded-md hover:bg-slate-800 transition disabled:opacity-60">Unlock</button>
+      </form>
+    </div>
+  </main>
+  <div id="app"></div>
+
+  <script>
+    const P={s:'WBhj0tUbq/shOxktk+ZHbw==',i:'lIJLk/046q9Kqwgh',d:'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'};
+    const u=x=>Uint8Array.from(atob(x),ch=>ch.charCodeAt(0));
+    async function decrypt(pw){
+      const km=await crypto.subtle.importKey('raw',new TextEncoder().encode(pw),'PBKDF2',false,['deriveKey']);
+      const k=await crypto.subtle.deriveKey({name:'PBKDF2',salt:u(P.s),iterations:250000,hash:'SHA-256'},km,{name:'AES-GCM',length:256},false,['decrypt']);
+      return new TextDecoder().decode(await crypto.subtle.decrypt({name:'AES-GCM',iv:u(P.i)},k,u(P.d)));
+    }
+    const $=id=>document.getElementById(id);
+    $('pw').focus();
+    $('f').onsubmit=async e=>{
+      e.preventDefault();
+      const btn=$('btn'),err=$('err');
+      btn.disabled=true;btn.textContent='Verifying…';err.textContent='';
+      try{
+        const html=await decrypt($('pw').value.trim().toUpperCase());
+        $('gate').remove();
+        $('app').innerHTML=html;
+        document.title='Happy Birthday, Erich Anne';
+        window.scrollTo(0,0);
+        const io=new IntersectionObserver(es=>es.forEach(x=>x.isIntersecting&&x.target.classList.add('show')),{threshold:.15});
+        document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+      }catch(_){
+        err.textContent=window.crypto&&crypto.subtle?'That code isn’t correct. Please try again.':'A secure (https) connection is required.';
+        btn.disabled=false;btn.textContent='Unlock';$('pw').select();
+      }
+    };
+  </script>
+</body>
+</html>
